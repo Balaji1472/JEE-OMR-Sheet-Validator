@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Answer Key Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .question {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        select {
+            width: 100%;
+            padding: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Answer Key Input</h1>
+    <form id="answerKeyForm">
+        <div class="section">
+            <h2>Physics (Questions 1-30)</h2>
+            <div class="question-grid" id="physics-grid"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Chemistry (Questions 31-60)</h2>
+            <div class="question-grid" id="chemistry-grid"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Mathematics (Questions 61-90)</h2>
+            <div class="question-grid" id="mathematics-grid"></div>
+        </div>
+        
+        <button type="submit">Submit Answer Key</button>
+    </form>
+
+    <script>
+        function createQuestionElement(number) {
+            const div = document.createElement('div');
+            div.className = 'question';
+            
+            const select = document.createElement('select');
+            select.name = `q${number}`;
+            select.required = true;
+            
+            ['Select', 'A', 'B', 'C', 'D'].forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option === 'Select' ? '' : option;
+                opt.textContent = option;
+                select.appendChild(opt);
+            });
+            
+            div.innerHTML = `<label>Q${number}</label><br>`;
+            div.appendChild(select);
+            
+            return div;
+        }
+
+        // Create question grids
+        document.addEventListener('DOMContentLoaded', () => {
+            const physicsGrid = document.getElementById('physics-grid');
+            const chemistryGrid = document.getElementById('chemistry-grid');
+            const mathsGrid = document.getElementById('mathematics-grid');
+
+            // Generate questions for each section
+            for (let i = 1; i <= 30; i++) {
+                physicsGrid.appendChild(createQuestionElement(i));
+            }
+            for (let i = 31; i <= 60; i++) {
+                chemistryGrid.appendChild(createQuestionElement(i));
+            }
+            for (let i = 61; i <= 90; i++) {
+                mathsGrid.appendChild(createQuestionElement(i));
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('answerKeyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const answers = [];
+            for (let i = 1; i <= 90; i++) {
+                const select = document.querySelector(`select[name="q${i}"]`);
+                answers.push(select.value);
+            }
+
+            try {
+                const response = await fetch('/submit_answer_key', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ answers }),
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Answer key saved successfully!');
+                    window.close();
+                }
+            } catch (error) {
+                alert('Error saving answer key: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

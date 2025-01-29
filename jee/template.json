@@ -1,0 +1,146 @@
+{
+  "pageDimensions": [
+    800,
+    1000
+  ],
+  "bubbleDimensions": [
+    12,
+    12
+  ],
+  "fieldBlocks": {
+    "RollNumber": {
+      "fieldType": "QTYPE_INT",
+      "fieldLabels": [
+        "digit1",
+        "digit2",
+        "digit3",
+        "digit4",
+        "digit5"
+      ],
+      "bubblesGap": 19,
+      "labelsGap": 14.9,
+      "origin": [
+        355,
+        295
+      ],
+      "bubbleValues": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "direction": "vertical"
+    },
+    "Physics": {
+      "fieldType": "QTYPE_MCQ4",
+      "fieldLabels": [
+        "physics1..30"
+      ],
+      "bubblesGap": 50,
+      "labelsGap": 14.7,
+      "origin": [
+        74,
+        530
+      ],
+      "bubbleValues": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "direction": "horizontal"
+    },
+    "Chemistry": {
+      "fieldType": "QTYPE_MCQ4",
+      "fieldLabels": [
+        "chemistry1..30"
+      ],
+      "bubblesGap": 50,
+      "labelsGap": 14.7,
+      "origin": [
+        333,
+        530
+      ],
+      "bubbleValues": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "direction": "horizontal"
+    },
+    "Mathematics": {
+      "fieldType": "QTYPE_MCQ4",
+      "fieldLabels": [
+        "maths1..30"
+      ],
+      "bubblesGap": 50,
+      "labelsGap": 14.7,
+      "origin": [
+        592,
+        530
+      ],
+      "bubbleValues": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "direction": "horizontal"
+    }
+  },
+  "preProcessors": [
+    {
+      "name": "ImagePreprocessing",
+      "options": {
+        "grayscale": true,
+        "claheClipLimit": 2.0,
+        "claheTileSize": [8, 8],
+        "adaptiveThreshold": {
+          "method": "GAUSSIAN_C",
+          "blockSize": 11,
+          "constant": 2
+        },
+        "medianBlur": {
+          "kernelSize": 3
+        }
+      }
+    },
+    {
+      "name": "MarkerDetection",
+      "options": {
+        "templatePath": "omrmarker.jpg",
+        "minMarkerSize": 20,
+        "maxMarkerSize": 60,
+        "matchThreshold": 0.3,
+        "scaleRange": {
+          "min": 0.5,
+          "max": 2.0,
+          "steps": 20
+        }
+      }
+    },
+    {
+      "name": "PerspectiveCorrection",
+      "options": {
+        "outputDimensions": [800, 1000],
+        "markerCount": 4
+      }
+    }
+  ],
+  "customLabels": {
+    "rollnum": [
+      "digit1",
+      "digit2",
+      "digit3",
+      "digit4",
+      "digit5"
+    ]
+  }
+}
